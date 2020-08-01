@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>淘宝提示词条</title>
+    <script src="kuayu_fengzhuang.js"></script>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script>
+        window.onload=function(){
+            var btn=document.querySelector("#btn");
+            btn.onclick=function(){
+                var keywordValue=document.querySelector("#keyword").value;
+                console.log(keywordValue);
+                //跨域访问  要跨域 datatype就必须是jsonp
+
+
+                myAjax({
+                    url:"https://suggest.taobao.com/sug",
+                    data:{q:keywordValue},
+                    success:function(data){
+                        var liTag="";
+                        for(var i=0;i<data.result.length;i++){
+                            var temp=data.result[i];
+                            var tempSug=temp[0];
+                            liTag +="<li>"+tempSug+"</li>";
+                        }
+                        var ulTag=document.querySelector("ul");
+                        ulTag.innerHTML=liTag;
+                    },
+                    jsonp:"callback",
+                    jsonpCallback:"hehe"
+                });
+
+                /*
+                //jQuery获取跨域数据：datatype必须使用jsonp
+                //浏览器?后面第一个key默认 callback， value是以jQuery开头动态生成的字符串 也是返回的函数名
+
+                $.ajax({
+                    url:"https://suggest.taobao.com/sug",
+                    data:{q:keywordValue},
+                    success:function(data){
+                        console.log(data);
+                    },
+                    dataType:"jsonp",
+                    jsonp:"cb" ,//修改callback的值为cb
+                    jsonpCallback: "haha" //修改返回的函数名
+                })*/
+            }
+        }
+    </script>
+</head>
+<body>
+<input type="text" id="keyword" placeholder="请输入关键字">
+<input type="button" id="btn" value="搜索">
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+</ul>
+</body>
+</html>

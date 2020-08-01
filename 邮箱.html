@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册界面</title>
+    <script>
+        window.onload=function(){
+            //查找各个id选择器
+            var username = document.querySelector("#username");
+            var email= document.querySelector("#email");
+            var phone = document.querySelector("#phone");
+
+            username.onblur=function(){
+                console.log("111");
+                var usernameValue = username.value;//取到输入的用户名
+                //将usernameValue提交给服务器，进行唯一性校验
+                var xhr=null;
+                if(window.XMLHttpRequest){
+                    xhr=new XMLHttpRequest();
+                }else{
+                    xhr=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xhr.open("get","checkusername.php?username="+usernameValue,true);
+                xhr.send(null);
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState==4){
+                        if(xhr.status==200){
+                            var result=xhr.responseText;
+                            var username_result=document.querySelector("#username_result");
+                            console.log(result);
+                            if(result=='ok'){
+                                username_result.innerText="用户名可以使用";
+                            }else{
+                                username_result.innerText="用户名已被注册";
+                            }
+                        }
+                    }
+                };
+            };
+
+            email.onblur=function(){
+                var emailValue=email.value;
+                var type="post";
+                var url="checkEmail.php";
+                var params="e="+emailValue;
+                var dataType="text";
+                var xhr=null;
+                if(window.XMLHttpRequest){
+                    xhr=new XMLHttpRequest();
+                }else{
+                    xhr=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xhr.open(type,url,true);
+                xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xhr.send(params);
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState==4){
+                        if(xhr.status==200){
+                            var result=xhr.responseText;
+                            var email_result=document.querySelector("#email_result");
+                            if(result==0){
+                                email_result.innerText="邮箱可以使用";
+                            }else{
+                                email_result.innerText="邮箱已被注册";
+                            }
+                        }
+                    }
+                };
+
+            };
+
+            phone.onblur=function(){
+                var phoneValue = phone.value;
+                var type="post";
+                var url="checkphone.php";
+                var params="phonenumber="+phoneValue;
+                var dataType="json";
+                var xhr=null;
+                if(window.XMLHttpRequest){
+                    xhr=new XMLHttpRequest();
+                }else{
+                    xhr=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xhr.open(type,url,true);
+                xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xhr.send(params);
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState==4){
+                        if(xhr.status==200){
+                            var result=xhr.responseText;
+                            result=JSON.parse(result);
+                            var phone_result=document.querySelector("#phone_result");
+                            if(result.status==0){
+                                phone_result.innerText=result.message.tips+ "," +result.message.phonefrom;
+
+                            }else if(result.status==1){
+                                phone_result.innerText=result.message;
+                            }
+                        }
+                    }
+                };
+            }
+
+        };
+    </script>
+</head>
+<body>
+
+<h1>注册界面</h1>
+<form action="" >
+    用户名：<input type="text" id="username"/><span id="username_result"></span><br/>
+    邮箱：<input type="text" id="email"/><span id="email_result"></span><br/>
+    手机号码：<input type="text" id="phone"/><span id="phone_result"></span>
+
+</form>
+</body>
+</html>

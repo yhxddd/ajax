@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册界面</title>
+
+    <script>
+    window.onload=function() {
+        var btn = document.getElementById("btn");
+        btn.onclick = function () {
+            var username = document.getElementById("username").value;
+            //console.log(username);
+            //获取输入的用户名
+            //使用JS代码进行checkusername.php这个文件的访问，要将本页面输入的username传给php文件 不在新页面进行校验
+            //此时用到ajax
+
+            //创建XMLHTTPRequest对象  要注意兼容
+            var xhr = new XMLHttpRequest();
+            /*
+            * var xhr =null;
+            * if(window.XMLHttpRequest){
+            *   xhr=new XMLHttpRequest();
+            * }else{
+            * //IE6浏览器及以下版本需要这样创建：
+            *   xhr= new ActiveXObject("Microsoft.XMLHTTP");
+            * }
+            * */
+
+            //准备发送： 第一个参数：提交方式  第二：访问的文件的url地址 也要加上获取的是哪个数据 第三个：true 异步 false 同步
+            xhr.open("get", "checkusername.php?username=" + username, true);
+            //post url中不能出现任何参数  参数都放在请求体中 传参时 传入send中
+            //xhr.open("post","checkusername.php",true);
+            //var param = "username=" +username;
+            //设置xhr的请求头 post请求才需要
+            // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            //xhr.send(parma);
+
+
+            //执行发送请求   如果上面open是get 则send里面必须是null
+            xhr.send(null);
+            xhr.onreadystatechange = function () {
+                // 指定回调函数
+                if(xhr.readyState==4)
+                    //xhr 状态4:数据解析完成
+                    if(xhr.status==200){//服务器返回状态
+                        var result = xhr.responseText;//获取php返回的值
+                        console.log(result);
+                        document.getElementById("result").innerText=result;
+                    }
+                }
+
+            };
+        };
+
+</script>
+</head>
+<body>
+<h1>注册界面</h1>
+<form action="checkusername.php" method="get">
+    用户名：<input type="text" name="username" id="username"/>
+    <input type="button" value="验证用户名" id="btn"/>
+    <span id="result"></span>
+    <br/>
+    密码：<input type="password" name="password"/>
+    <br/>
+    <input type="submit" value="提交"/>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手机查吉凶</title>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script>
+        $(function(){
+            $("#btn").click(function(){
+                var phonenumber=$("#phonenumber").val();
+                console.log(phonenumber);
+                $.ajax({
+                    url:"getphone.php",
+                    data:{mobile:phonenumber},
+                    dataType:"json",
+                    //服务器返回的数据必须是方法调用才能使用jsonp得到数据
+                    //第三方数据返回的数据是json格式时 需通过自己机器的php中转取访问第三方数据
+                    success:function(data){
+                        console.log(data);
+                        if(data.retCode ==200){
+                            var info=data.result.conclusion;
+                            document.querySelector("#result").innerHTML=info;
+
+                        }else{
+                            document.querySelector("result").innerHTML="信息获取失败请检查输入";
+                        }
+                        }
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+<div id="container">
+    <input type="text" id="phonenumber" placeholder="请输入手机号">
+    <input type="button" id="btn" value="查询">
+    <span id="result">结果信息</span>
+</div>
+</body>
+</html>

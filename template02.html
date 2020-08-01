@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>artTemplate常用语法</title>
+    <script src="template.js"></script>
+<!-- each 后面跟着的内容 应该是template(,)中传入数据的某一个字段
+    如果该数据本身是一个数组 则需要进行加工
+-->
+    <script type="text/html" id="resultTemplate">
+        {{if isAdmin}}
+            <h1>{{title}}</h1>
+            <h2>一共有{{list.length}}条数据</h2>
+            <ul>
+            {{each list as value i}}
+                <li>索引{{i+1}}:{{value}}</li>
+            {{/each}}
+            </ul>
+        {{/if}}
+
+    </script>
+    <script>
+        window.onload=function(){
+            var data={
+                title:'条件判断基本例子',
+                isAdmin:true,
+                books:['文艺','博客','摄影','电影','民谣','旅行','吉他']
+            };
+            var html=template("resultTemplate",data);
+            var container=document.querySelector("#container");
+            container.innerHTML=html;
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <h1>标题</h1>
+        <ul>
+            <li>索引1：文艺</li>
+            <li>索引2：博客</li>
+        </ul>
+    </div>
+</body>
+</html>

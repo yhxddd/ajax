@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板引擎</title>
+    <script src="template.js"></script>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script src="kuayu_fengzhuang.js"></script>
+
+
+    <!--定义模板 必须给模板一个id  且type="text/html"
+       生成标签得数量由获得结果的data数组的数量决定-->
+    <!-- s: (10) ["沧元图", "cctv13在线直播", "cctv1在线直播", "c1驾照能开什么车", "cad制图初学入门", "彩票", "超神机械师", "c罗", "蔡徐坤", "陈情令"]
+        查询结果中 data.s 是我们需要的结果数组
+  -->
+    <script type="text/html" id="resultTemplate">
+        {{each s as value i}}
+        <li>
+            <div>
+                <span>结果{{i}}:</span>
+                <span>{{value}}</span>
+            </div>
+        </li>
+        {{/each}}
+    </script>
+
+</head>
+<script>
+    window.onload=function(){
+        var btn=document.querySelector("#btn");
+        btn.onclick=function(){
+            var keywordValue=document.querySelector("#keyword").value;
+            console.log(keywordValue);
+            //跨域访问
+            /*
+            var script=document.createElement("script");
+            script.src="https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="+keywordValue +"&cb=hehe";
+            window["hehe"]=function(data){
+                //console.log(data);
+                var liTag="";
+                for(var i=0;i<data.s.length;i++){
+                    var temp=data.s[i];
+                    var tempSug=temp[0];
+                    liTag +="<li>"+tempSug+"</li>";
+                }
+                var ulTag=document.querySelector("ul");
+                ulTag.innerHTML=liTag;
+            };
+            var head=document.querySelector("head");
+            head.appendChild(script);
+            */
+
+            //跨域封装：
+            /*myAjax({
+                url:"https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su",
+                data:{wd:keywordValue},
+                success:function(data){
+                    console.log(data);
+                },
+                jsonp:"cb",
+                jsonpCallback:"haha"
+            });*/
+
+            //jQuery 跨域:
+            $.ajax({
+                url:"https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su",
+                data:{wd:keywordValue},
+                success:function(data){
+                    console.log(data);
+                    //将数据和模板结合起来生成html片段
+                    var html=template("resultTemplate",data);
+                    console.log(html);
+                    var ulTag=document.querySelector("ul");
+                    ulTag.innerHTML=html;
+
+                    /*var liTag="";
+                    for(var i=0;i<data.s.length;i++){
+                        var temp=data.s[i];
+                 //字符串拼接进行前端渲染：
+                       // liTag +="<li>"+temp+"</li>"; 结果只有 <ul><li>时
+                        //现修改结果样式 加入div 和span
+                        liTag +="<li><div><span>结果"+i+":</span><span>"+temp+"</span></div></li>";
+                    }
+                    var ulTag=document.querySelector("ul");
+                    ulTag.innerHTML=liTag;*/
+                },
+                dataType:"jsonp",
+                jsonp:"cb"
+            });
+}
+}
+</script>
+</head>
+<body>
+<input type="text" id="keyword" placeholder="请输入关键字">
+<input type="button" id="btn" value="搜索">
+<ul>
+    <!--<li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>-->
+    <li>
+        <div>
+            <span>结果1:</span>
+            <span>1</span>
+        </div>
+    </li>
+    <li>
+        <div>
+            <span>结果2:</span>
+            <span>2</span>
+        </div>
+    </li>
+    <li>
+        <div>
+            <span>结果3:</span>
+            <span>3</span>
+        </div>
+    </li>
+    <li>
+        <div>
+            <span>结果4:</span>
+            <span>4</span>
+        </div>
+    </li>
+    <li>
+        <div>
+            <span>结果5:</span>
+            <span>5</span>
+        </div>
+    </li>
+
+</ul>
+</body>
+</html>

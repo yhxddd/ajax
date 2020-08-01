@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>artTemplate常用语法</title>
+    <script src="template.js"></script>
+
+    <script type="text/html" id="resultTemplate">
+        <p>不转义：{{#value}}</p>
+        <p>默认转义：{{value}}</p>
+<!-- 加#则可以转为浏览器识别的html标签 会改变颜色  不加#号只当作字符串输出-->
+    </script>
+    <script>
+        window.onload=function(){
+            //数据为字符串
+            var data={
+                value:'<span style="color:#F00">hello world!</span>'
+                 };
+            var html=template("resultTemplate",data);
+            var container=document.querySelector("#container");
+            container.innerHTML=html;
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+
+    </div>
+</body>
+</html>

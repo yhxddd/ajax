@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax封装</title>
+    <script>
+        function myAjax(type,url,parms,dataType,callback,async){
+            //传参数时，要注意参数顺序
+
+            var xhr=null;
+            if(window.XMLHttpRequest){
+                xhr=new XMLHttpRequest();
+            }else{
+                xhr=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            if(type=="get"){
+                if(parms && parms!=""){
+                    url +="?"+ parms;
+                }
+            }
+            xhr.open(type,url,async);
+            if(type=="get"){
+                xhr.send(null);
+            }else{
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                xhr.send(parms);
+            }
+            if(async){//异步
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState== 4){
+                        if(xhr.status == 200){
+                            var result=null;
+                            if(dataType=="json"){
+                                result=xhr.responseText;
+                                result=JSON.parse(result);
+                            }else if(dataType == "xml"){
+                                result=xhr.responseXML;
+                            }else{
+                                result=xhr.responseText;
+                            }
+                            if(callback){
+                                callback(result);//对获取到得值进行进一步操作
+                                //如:显示到表格中
+                            }
+                        }
+                    }
+                }
+            }else {//同步
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        var result = null;
+                        if (dataType == "json") {
+                            result = xhr.responseText;
+                            result = JSON.parse(result);
+                        } else if (dataType == "xml") {
+                            result = xhr.responseXML;
+                        } else {
+                            result = xhr.responseText;
+                        }
+                        if (callback) {
+                            callback(result);//对获取到得值进行进一步操作
+                            //如:显示到表格中
+                        }
+                    }
+                }
+            }
+        };
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

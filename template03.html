@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>artTemplate常用语法</title>
+    <script src="template.js"></script>
+<!-- each 后面跟着的内容 应该是template(,)中传入数据的某一个字段(属性)
+    如果该数据本身是一个数组 则需要进行加工
+-->
+    <script type="text/html" id="resultTemplate">
+            <ul>
+            {{each arr as value i}}
+                <li>索引{{i+1}}:{{value}}</li>
+            {{/each}}
+            </ul>
+
+
+    </script>
+    <script>
+        window.onload=function(){
+            var data= ['文艺','博客','摄影','电影','民谣','旅行','吉他'];
+            var temp={};
+            temp.arr=data;
+            var html=template("resultTemplate",temp);
+            var container=document.querySelector("#container");
+            container.innerHTML=html;
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <h1>标题</h1>
+        <ul>
+            <li>索引1：文艺</li>
+            <li>索引2：博客</li>
+        </ul>
+    </div>
+</body>
+</html>

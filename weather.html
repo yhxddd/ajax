@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>引入外部php 并动态创建script标签</title>
+   <!-- <script src="weatherdata.php?city=beijing"></script> 这种标签只能写死数据 不能按照用户输入来判断-->
+    <script>
+       /* function foo(data){
+            console.log(data);
+        };*/
+        window.onload=function(){
+            var btn=document.querySelector("#btn");
+            btn.onclick=function(){
+                var cityName=document.querySelector("#city").value;
+                //动态创建script标签 动态指定citym名称 /src属性
+                var script=document.createElement("script");
+                script.src="./weatherdata.php?city="+ cityName +"&callback=foo";
+                window["foo"]=function(data){//和上面单独函数功能相同
+                    console.log(data);
+                }
+                var head=document.querySelector("head");
+                head.appendChild(script);
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>天气信息查询</h1>
+<input type="text" id="city" placeholder="请输入城市名称">
+<input type="button" id="btn" value="查询">
+</body>
+</html>
